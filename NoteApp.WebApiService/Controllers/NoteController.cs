@@ -13,22 +13,22 @@ namespace NoteApp.WebApiService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class NoteController : ControllerBase
     {
-        private readonly ICategoryService categoryService;
+        private readonly INoteService noteService;
 
-        public CategoryController(ICategoryService categoryService)
+        public NoteController(INoteService noteService)
         {
-            this.categoryService = categoryService;
+            this.noteService = noteService;
         }
 
         [HttpGet]
-        [CategoryException]
+        [NoteException]
         public IActionResult Get()
         {
-            ServiceResponse<Category> response = new ServiceResponse<Category>
+            ServiceResponse<Note> response = new ServiceResponse<Note>
             {
-                Entities = categoryService.GetAll(),
+                Entities = noteService.GetAll(),
                 IsSuccess = true,
                 HasError = false
             };
@@ -38,12 +38,12 @@ namespace NoteApp.WebApiService.Controllers
         }
 
         [HttpGet("{id}")]
-        [CategoryException]
+        [NoteException]
         public IActionResult Get(int id)
         {
-            ServiceResponse<Category> response = new ServiceResponse<Category>
+            ServiceResponse<Note> response = new ServiceResponse<Note>
             {
-                Entity = categoryService.GetById(id),
+                Entity = noteService.GetById(id),
                 IsSuccess = true,
                 HasError = false
             };
@@ -51,31 +51,34 @@ namespace NoteApp.WebApiService.Controllers
             return Ok(response);
         }
         [HttpPost]
-        [CategoryException]
-        [CategoryValidate]
-        public IActionResult Post([FromBody] CategoryModel model)
+        [NoteException]
+        [NoteValidate]
+        public IActionResult Post([FromBody] NoteModel model)
         {
-            Category category = new Category
+            
+            Note note = new Note
             {
-                CategoryName = model.CategoryName
+                NoteTitle = model.NoteTitle,
+                NoteDescription = model.NoteDescription,
+                CategoryId = model.CategoryId
             };
-            categoryService.Add(category);
-            ServiceResponse<Category> response = new ServiceResponse<Category>
+            noteService.Add(note);
+            ServiceResponse<Note> response = new ServiceResponse<Note>
             {
-                Entity = category,
+                Entity = note,
                 IsSuccess = true,
                 HasError = false
             };
             return Ok();
         }
         [HttpPut]
-        [CategoryException]
-        [CategoryValidate]
-        public IActionResult Put(int id, [FromBody] CategoryModel model)
+        [NoteException]
+        [NoteValidate]
+        public IActionResult Put(int id, [FromBody] NoteModel model)
         {
-            ServiceResponse<Category> response = new ServiceResponse<Category>();            
-            var category = categoryService.GetById(id);
-            if (category == null)
+            ServiceResponse<Note> response = new ServiceResponse<Note>();
+            var note = noteService.GetById(id);
+            if (note == null)
             {
                 response.HasError = true;
                 response.IsSuccess = false;
@@ -84,20 +87,20 @@ namespace NoteApp.WebApiService.Controllers
             }
             else
             {
-                category.CategoryName = model.CategoryName;
-                categoryService.Update(category);
+                note.NoteTitle = model.NoteTitle;
+                noteService.Update(note);
                 response.IsSuccess = true;
                 response.HasError = false;
                 return Ok(response);
             }
         }
         [HttpDelete]
-        [CategoryException]
+        [NoteException]
         public IActionResult Delete(int id)
         {
-            ServiceResponse<Category> response = new ServiceResponse<Category>();
-            var category = categoryService.GetById(id);
-            if (category == null)
+            ServiceResponse<Note> response = new ServiceResponse<Note>();
+            var note = noteService.GetById(id);
+            if (note == null)
             {
                 response.HasError = true;
                 response.IsSuccess = false;
@@ -106,7 +109,7 @@ namespace NoteApp.WebApiService.Controllers
             }
             else
             {
-                categoryService.Delete(category);
+                noteService.Delete(note);
                 response.IsSuccess = true;
                 response.HasError = false;
                 return Ok(response);
