@@ -5,6 +5,8 @@
 Notes Application is a .Net Core Project with Category and Notes.
 
 ![NoteApp](https://user-images.githubusercontent.com/34594057/138416750-92b1a576-0c0a-4eed-a8ce-739f9899d56c.png)
+-----
+![NoteApp2](https://user-images.githubusercontent.com/34594057/138417136-c9fcd513-4228-4b37-9329-3792cc653d3d.png)
 
 ## Features
 -It is a Web Api Application that can perform CRUD operations with EntityFramework.Core.
